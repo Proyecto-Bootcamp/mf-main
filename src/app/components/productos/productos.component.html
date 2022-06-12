@@ -1,0 +1,151 @@
+<div>
+  <div class="table-responsive">
+    <button
+      class="btn btn-outline-success float-end mb-3 me-4"
+      (click)="exportToExcel()"
+    >
+      Export to Excel
+    </button>
+    <button
+      class="btn btn-outline-danger float-end mb-3 me-4"
+      (click)="exportToPdf()"
+    >
+      Export to Pdf
+    </button>
+    <table id="table" class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Id_Pedido</th>
+          <th scope="col">Id_Proveedor</th>
+          <th scope="col">Actualizar</th>
+          <th scope="col">Borrar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <td>{{ producto.idProducto }}</td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.precio }}</td>
+          <td>{{ producto.idPedido }}</td>
+          <td>{{ producto.idProveedor }}</td>
+          <td>
+            <button
+              *ngIf="isAdmin"
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="cargarProducto(producto, content)"
+            >
+              Actualizar
+            </button>
+          </td>
+          <td>
+            <button
+              *ngIf="isAdmin"
+              type="button"
+              class="btn btn-outline-danger"
+              (click)="mostrarVentanaEliminar(producto)"
+            >
+              Borrar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<button
+  *ngIf="isLogged"
+  type="button"
+  class="btn btn-outline-success float-end"
+  (click)="open(content)"
+>
+  Insertar
+</button>
+
+<div class="d-flex justify-content-between p-2">
+  <select
+    class="custom-select"
+    style="width: auto"
+    [(ngModel)]="pageSize"
+    (ngModelChange)="consultarProductos()"
+  >
+    <option [ngValue]="4">4 items per page</option>
+    <option [ngValue]="6">6 items per page</option>
+    <option [ngValue]="8">8 items per page</option>
+    <option [ngValue]="10">10 items per page</option>
+  </select>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Formulario Productos</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <form
+    #formProducto="ngForm"
+    (ngSubmit)="guardarProducto(formProducto?.value)"
+  >
+    <div class="modal-body">
+      <div class="mb-3">
+        <div class="form-group">
+          <label for="txtNombre">Nombre: *</label>
+          <input
+            id="txtNombre"
+            name="nombre"
+            class="form-control"
+            [(ngModel)]="producto.nombre"
+            #nombre="ngModel"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="Precio">Precio: *</label>
+          <input
+            id="Precio"
+            name="precio"
+            class="form-control"
+            [(ngModel)]="producto.precio"
+            #precio="ngModel"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="idPedido">idPedido: *</label>
+          <input
+            id="idPedido"
+            name="idPedido"
+            class="form-control"
+            [(ngModel)]="producto.idPedido"
+            #idPedido="ngModel"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="idProveedor">idProveedor: *</label>
+          <input
+            id="idProveedor"
+            name="idProveedor"
+            class="form-control"
+            [(ngModel)]="producto.idProveedor"
+            #idProveedor="ngModel"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <button type="button" class="btn btn-danger" (click)="modal.close()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</ng-template>

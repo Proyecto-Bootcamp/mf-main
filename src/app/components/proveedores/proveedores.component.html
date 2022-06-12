@@ -1,0 +1,125 @@
+<div>
+  <div class="table-responsive">
+    <button
+      class="btn btn-outline-success float-end mb-3 me-4"
+      (click)="exportToExcel()"
+    >
+      Export to Excel
+    </button>
+    <button
+      class="btn btn-outline-danger float-end mb-3 me-4"
+      (click)="exportToPdf()"
+    >
+      Export to Pdf
+    </button>
+  </div>
+  <table id="table" class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Direccion</th>
+        <th scope="col">Actualizar</th>
+        <th scope="col">Borrar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let proveedor of proveedores">
+        <td>{{ proveedor.idProveedor }}</td>
+        <td>{{ proveedor.nombre }}</td>
+        <td>{{ proveedor.direccion }}</td>
+        <td>
+          <button
+            *ngIf="isAdmin"
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="cargarProveedor(proveedor, content)"
+          >
+            Actualizar
+          </button>
+        </td>
+        <td>
+          <button
+            *ngIf="isAdmin"
+            type="button"
+            class="btn btn-outline-danger"
+            (click)="mostrarVentanaEliminar(proveedor)"
+          >
+            Borrar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<button
+  *ngIf="isAdmin"
+  type="button"
+  class="btn btn-outline-success float-end"
+  (click)="open(content)"
+>
+  Insertar
+</button>
+
+<div class="d-flex justify-content-between p-2">
+  <select
+    class="custom-select"
+    style="width: auto"
+    [(ngModel)]="pageSize"
+    (ngModelChange)="consultarProveedores()"
+  >
+    <option [ngValue]="4">4 items per page</option>
+    <option [ngValue]="6">6 items per page</option>
+    <option [ngValue]="8">8 items per page</option>
+    <option [ngValue]="10">10 items per page</option>
+  </select>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Formulario Proveedores</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <form
+    #formProveedor="ngForm"
+    (ngSubmit)="guardarProveedor(formProveedor?.value)"
+  >
+    <div class="modal-body">
+      <div class="mb-3">
+        <div class="form-group">
+          <label for="txtNombre">Nombre: *</label>
+          <input
+            id="txtNombre"
+            name="nombre"
+            class="form-control"
+            [(ngModel)]="proveedor.nombre"
+            #nombre="ngModel"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="txtDireccion">Direccion: *</label>
+          <input
+            id="txtDireccion"
+            name="direccion"
+            class="form-control"
+            [(ngModel)]="proveedor.direccion"
+            #direccion="ngModel"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <button type="button" class="btn btn-danger" (click)="modal.close()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</ng-template>

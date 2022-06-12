@@ -1,0 +1,135 @@
+<div>
+  <div class="table-responsive">
+    <button
+      class="btn btn-outline-success float-end mb-3 me-4"
+      (click)="exportToExcel()"
+    >
+      Export to Excel
+    </button>
+    <button
+      class="btn btn-outline-danger float-end mb-3 me-4"
+      (click)="exportToPdf()"
+    >
+      Export to Pdf
+    </button>
+    <table id="table" class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Precio_Total</th>
+          <th scope="col">Id_Cliente</th>
+          <th scope="col">Actualizar</th>
+          <th scope="col">Borrar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pedido of pedidos">
+          <td>{{ pedido.idPedido }}</td>
+          <td>{{ pedido.fecha }}</td>
+          <td>{{ pedido.precioTotal }}</td>
+          <td>{{ pedido.idCliente }}</td>
+          <td>
+            <button
+              *ngIf="isAdmin"
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="cargarPedido(pedido, content)"
+            >
+              Actualizar
+            </button>
+          </td>
+          <td>
+            <button
+              *ngIf="isAdmin"
+              type="button"
+              class="btn btn-outline-danger"
+              (click)="mostrarVentanaEliminar(pedido)"
+            >
+              Borrar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<button
+  *ngIf="isLogged"
+  type="button"
+  class="btn btn-outline-success float-end"
+  (click)="open(content)"
+>
+  Insertar
+</button>
+
+<div class="d-flex justify-content-between p-2">
+  <select
+    class="custom-select"
+    style="width: auto"
+    [(ngModel)]="pageSize"
+    (ngModelChange)="consultarPedidos()"
+  >
+    <option [ngValue]="4">4 items per page</option>
+    <option [ngValue]="6">6 items per page</option>
+    <option [ngValue]="8">8 items per page</option>
+    <option [ngValue]="10">10 items per page</option>
+  </select>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Formulario Pedidos</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <form #formPedido="ngForm" (ngSubmit)="guardarPedido(formPedido?.value)">
+    <div class="modal-body">
+      <div class="mb-3">
+        <div class="form-group">
+          <label for="Fecha">Fecha: *</label>
+          <input
+            id="Fecha"
+            name="fecha"
+            class="form-control"
+            [(ngModel)]="pedido.fecha"
+            #fecha="ngModel"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="Precio">Precio: *</label>
+          <input
+            id="Precio"
+            name="precioTotal"
+            class="form-control"
+            [(ngModel)]="pedido.precioTotal"
+            #precioTotal="ngModel"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="Cliente">Id_Cliente: *</label>
+          <input
+            id="Cliente"
+            name="idCliente"
+            class="form-control"
+            [(ngModel)]="pedido.idCliente"
+            #idCliente="ngModel"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <button type="button" class="btn btn-danger" (click)="modal.close()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</ng-template>
