@@ -1,12 +1,14 @@
 <div>
   <div class="table-responsive">
     <button
+      *ngIf="isLogged"
       class="btn btn-outline-success float-end mb-3 me-4"
       (click)="exportToExcel()"
     >
       Export to Excel
     </button>
     <button
+      *ngIf="isLogged"
       class="btn btn-outline-danger float-end mb-3 me-4"
       (click)="exportToPdf()"
     >
@@ -58,7 +60,7 @@
 </div>
 
 <button
-  *ngIf="isLogged"
+  *ngIf="isAdmin"
   type="button"
   class="btn btn-outline-success float-end"
   (click)="open(content)"
