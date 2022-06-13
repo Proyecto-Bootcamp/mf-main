@@ -102,7 +102,7 @@ export class ProductosComponent implements OnInit {
     if (!this.producto.idProducto) {
       this.producto = new Producto();
       this.producto.nombre = data.nombre;
-      this.producto.precio = data.direccion;
+      this.producto.precio = data.precio;
       this.producto.idPedido = data.idPedido;
       this.producto.idProveedor = data.idProveedor;
       this.productosService
